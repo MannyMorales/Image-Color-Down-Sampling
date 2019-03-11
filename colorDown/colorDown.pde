@@ -35,12 +35,34 @@ void setup(){
     centroids[i] = new Centroid(pixelColors[(int)random(pixelColors.length)]);
   }
   
+  // loops for number of given iterations
+  for(int i=0; i<iterations; i++){
+    // finds the nearest centroid for each pixel and
+    // updates the centroid's running totals
+    for(int j=0; j<pixelColors.length; j++){
+      findNearestCentroid(pixelColors[j], centroids); 
+    }
+    
+    // adjusts each centroid's rgb values by finding mean of all nearest colors
+    for(int j=0; j<centroids.length; j++){
+      centroids[j].updatePosition(); 
+    }
+  }
   
+  // loops through each pixel, finds nearest centroid, then sets the color
+  // of the pixel equal to the centroid
+  for(int i=0; i<pixelColors.length; i++){
+    pixelColors[i] = findNearestCentroid(pixelColors[i], centroids); 
+  }
+  
+  // convert pixelColors array into a pixels[] array
+  
+  // output image
 }
 
 
 // finds the centroid closest to this point
-void findNearestCentroid(PVector point, Centroid[] arr){
+PVector findNearestCentroid(PVector point, Centroid[] arr){
   // sets initial minimum to a big number so that the minimum will (should) be set
   // by a centroid in our set
   float minDist = 999999;
@@ -55,4 +77,6 @@ void findNearestCentroid(PVector point, Centroid[] arr){
 
   // updates the closest centroid's running totals with the point's x and y values
   arr[centInd].updateRunningTotals(point.x, point.y, point.z);
+  
+  return arr[centInd].pos;
 }
