@@ -3,7 +3,7 @@ String outputDest;
 int numColors;
 int iterations;
 PVector[] pixelColors;
-PVector[] centroids;
+Centroid[] centroids;
 
 void setup(){
   // PARAMS
@@ -29,13 +29,30 @@ void setup(){
   }
   
   // create one centroid for each color allowed in output
-  centroids = new PVector[numColors];
+  centroids = new Centroid[numColors];
   for(int i=0; i<centroids.length; i++){
     // initialize each centroid to a random pixel in the image
-    centroids[i] = pixelColors[(int)random(pixelColors.length)];
+    centroids[i] = new Centroid(pixelColors[(int)random(pixelColors.length)]);
   }
+  
+  
 }
 
-void draw(){
-  
+
+// finds the centroid closest to this point
+void findNearestCentroid(PVector point, Centroid[] arr){
+  // sets initial minimum to a big number so that the minimum will (should) be set
+  // by a centroid in our set
+  float minDist = 999999;
+  // keeps track of which centroid is closest
+  int centInd = 0;
+  for(int i=0; i<arr.length; i++){
+    if(point.dist(arr[i].pos) < minDist){
+       minDist = point.dist(arr[i].pos);
+       centInd = i;
+    }
+  }
+
+  // updates the closest centroid's running totals with the point's x and y values
+  arr[centInd].updateRunningTotals(point.x, point.y, point.z);
 }
