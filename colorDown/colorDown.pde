@@ -1,4 +1,5 @@
 PImage inputImg;
+PImage outputImg;
 String outputDest;
 int numColors;
 int iterations;
@@ -51,13 +52,15 @@ void setup(){
   
   // loops through each pixel, finds nearest centroid, then sets the color
   // of the pixel equal to the centroid
+  outputImg = createImage(inputImg.width, inputImg.height, RGB);
   for(int i=0; i<pixelColors.length; i++){
-    pixelColors[i] = findNearestCentroid(pixelColors[i], centroids); 
+    pixelColors[i] = findNearestCentroid(pixelColors[i], centroids);
+    // converts the rgb values to pixels and adds them to outputImg
+    outputImg.pixels[i] = color(pixelColors[i].x, pixelColors[i].y, pixelColors[i].z);
   }
   
-  // convert pixelColors array into a pixels[] array
-  
   // output image
+  outputImg.save(outputDest);
 }
 
 
